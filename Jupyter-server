@@ -1,0 +1,12 @@
+Commands to build jupyter server in from-src container
+
+docker run --gpus all --ipc="host" -it -w /tensorflow -v $PWD:/mnt -p 8888:8888 -e HOST_PERMS="$(id -u):$(id -g)" tensorflow/tensorflow:from-src2 bash 
+export LD_LIBRARY_PATH=“/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/include/x64_64-linux-gnu:/usr/local/nvidia/lib:/usr/local/nvidia/lib64”
+pip install jupyter
+pip install jupyter_http_over_ws
+jupyter serverextension enable --py jupyter_http_over_ws
+jupyter notebook --no-browser --notebook-dir=/mnt/notebooks --ip=0.0.0.0  --debug --NotebookApp.allow_origin='https://www.example.com' --NotebookApp.allow_remote_access=True --allow-root
+ 
+ or to reduce log traffic try
+
+jupyter notebook --no-browser --notebook-dir=/mnt/notebooks --ip=0.0.0.0 --log-level=‘INFO’  --NotebookApp.allow_origin='https://www.example.com' --NotebookApp.allow_remote_access=True --allow-root
